@@ -1,27 +1,39 @@
+# Compiler settings
 CC = gcc
-CFLAGS = -Wall -Wextra -g
-TARGET = myprogram
+CFLAGS = -Wall -Wextra -Iinclude
+
+# Directories
 SRCDIR = src
-BINDIR = bin
+INCDIR = include
+BUILDDIR = build
+TARGETDIR = bin
 
-SOURCES := $(wildcard $(SRCDIR)/*.c)
-OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(BINDIR)/%.o)
-DEPS := $(OBJECTS:.o=.d)
+# Files
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))
+TARGET = $(TARGETDIR)/main
 
-.PHONY: all clean
+# Default target
+all: $(TARGET)
 
-all: $(BINDIR)/$(TARGET)
-
-$(BINDIR)/$(TARGET): $(OBJECTS)
+# Build target
+$(TARGET): $(OBJS)
+	@mkdir -p $(TARGETDIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(BINDIR)/%.o: $(SRCDIR)/%.c | $(BINDIR)
-	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
+# Compile source files
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BINDIR):
-	mkdir -p $(BINDIR)
-
+# Clean target
 clean:
-	rm -rf $(BINDIR)
+	@rm -rf $(BUILDDIR) $(TARGETDIR)
 
--include $(DEPS)
+# Run
+run: $(TARGET)
+	$(TARGET)
+
+# Phony targets
+.PHONY: all clean run
+

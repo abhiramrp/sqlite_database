@@ -2,6 +2,12 @@
 
 int main() {
 
+    printf("Hello, World!\n");
+
+    /*
+
+    
+
     InputBuffer* input_buffer = new_input_buffer();
 
     while (true) {
@@ -14,6 +20,9 @@ int main() {
         } else {
             printf("Unrecognized command '%s'.\n", input_buffer->buffer);
         }
-  }
+    }
+
+    */
 
     return 0; 
+}
