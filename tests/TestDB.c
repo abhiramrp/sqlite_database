@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Statement.h"
+#include "Result.h"
+
 
 static FILE* temp_file = NULL;
 
@@ -36,24 +39,7 @@ char* run_script(const char* commands) {
         return NULL;
     }
 
-    // Write commands to the pipe
-    fputs(commands, pipe);
-    fclose(pipe);
-
-    // Open pipe again to read output
-    pipe = popen("./db", "r");
-    if (!pipe) {
-        return NULL;
-    }
-
-    char* output = NULL;
-    size_t len = 0;
-    ssize_t read;
-
-    // Read entire output
-    while ((read = getline(&output, &len, pipe)) != -1) {
-        // Process output here if needed
-    }
+    InputBuffer* input_buffer = new_input_buffer();
 
     fclose(pipe);
     return output;
