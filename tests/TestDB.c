@@ -11,26 +11,6 @@
 
 static FILE* temp_file = NULL;
 
-int init_suite1(void)
-{
-   if (NULL == (temp_file = fopen("temp.txt", "w+"))) {
-      return -1;
-   }
-   else {
-      return 0;
-   }
-}
-
-int clean_suite1(void)
-{
-   if (0 != fclose(temp_file)) {
-      return -1;
-   }
-   else {
-      temp_file = NULL;
-      return 0;
-   }
-}
 
 
 char* run_script(const char* commands) {
@@ -41,8 +21,35 @@ char* run_script(const char* commands) {
 
     InputBuffer* input_buffer = new_input_buffer();
 
+    int numCommands = sizeof(commands) / sizeof(commands[0]);
+
+    // Loop through the array
+    for (int i = 0; i < numCommands; ++i) {
+        FILE *fake_input = fmemopen(commands[i], strlen(commands[i]), "r");
+        if (fake_input == NULL) {
+            printf("Error creating fake input stream\n");
+            exit(EXIT_FAILURE);
+        }
+
+        // Redirect stdin to the fake input stream
+        FILE *original_stdin = stdin;
+        stdin = fake_input;
+
+
+        read_input(&input_buffer);
+
+        stdin = original_stdin;
+        fclose(fake_input);
+
+        // Print the result
+        printf("Read input: %s\n", input_buffer.buffer);
+
+        // Free allocated memory
+        free(input_buffer.buffer);
+    }
+
     fclose(pipe);
-    return output;
+    return "adf";
 }
 
 
