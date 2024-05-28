@@ -4,8 +4,6 @@
             "name": "macos-clang-arm64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/Cellar/cunit",
-                "/opt/homebrew/Cellar/cunit/2.1-3/include"
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "${default}",
